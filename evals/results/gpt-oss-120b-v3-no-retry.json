@@ -1,0 +1,565 @@
+{
+  "summary": {
+    "label": "gpt-oss-120b · v3, no retry",
+    "model": "openai/gpt-oss-120b",
+    "retry": false,
+    "ranAt": "2026-11-25T18:48:52.127Z",
+    "n": 60,
+    "accuracy": "92%",
+    "byBucket": {
+      "easy": "93.3%",
+      "medium": "100%",
+      "hard": "80%"
+    },
+    "wrongAnswerRate": "4%",
+    "safeFailRate": "4%",
+    "refusalCorrect": "100%",
+    "p50ms": 1458,
+    "p95ms": 4509,
+    "avgTokens": 1102
+  },
+  "results": [
+    {
+      "id": "e01",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1458,
+      "tokens": 1041,
+      "sql": "SELECT COUNT(*) AS active_customers FROM v_customers WHERE active = true"
+    },
+    {
+      "id": "e02",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 982,
+      "tokens": 1051,
+      "sql": "SELECT COUNT(DISTINCT product_id) AS product_count\nFROM v_sales\nWHERE order_status = 'completed'"
+    },
+    {
+      "id": "e03",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 733,
+      "tokens": 1054,
+      "sql": "SELECT COUNT(*) AS purchase_orders FROM v_purchasing WHERE supplier_country = 'China'"
+    },
+    {
+      "id": "e04",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 739,
+      "tokens": 1057,
+      "sql": "SELECT round(sum(balance)::numeric, 2) AS total_overdue FROM v_receivables WHERE status = 'overdue'"
+    },
+    {
+      "id": "e05",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 872,
+      "tokens": 1050,
+      "sql": "SELECT COUNT(*) AS overdue_invoices\nFROM v_receivables\nWHERE status = 'overdue'"
+    },
+    {
+      "id": "e06",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1415,
+      "tokens": 1070,
+      "sql": "SELECT product_id, sku, product_name, on_hand\nFROM v_products\nORDER BY on_hand DESC\nLIMIT 1"
+    },
+    {
+      "id": "e07",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 630,
+      "tokens": 1048,
+      "sql": "SELECT COUNT(*) AS customer_count FROM v_customers WHERE city = 'Karachi'"
+    },
+    {
+      "id": "e08",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 687,
+      "tokens": 1048,
+      "sql": "SELECT round(avg(unit_price)::numeric, 2) AS avg_unit_price FROM v_products"
+    },
+    {
+      "id": "e09",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 765,
+      "tokens": 1041,
+      "sql": "SELECT COUNT(*) AS products_below_reorder_point\nFROM v_products\nWHERE on_hand < reorder_point"
+    },
+    {
+      "id": "e10",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 821,
+      "tokens": 1044,
+      "sql": "SELECT category,\n       COUNT(*) AS product_count\nFROM v_products\nGROUP BY category\nORDER BY product_count DESC"
+    },
+    {
+      "id": "e11",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 900,
+      "tokens": 1047,
+      "sql": "SELECT round(sum(total_cost)::numeric, 2) AS total_po_value FROM v_purchasing"
+    },
+    {
+      "id": "e12",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 704,
+      "tokens": 1052,
+      "sql": "SELECT COUNT(DISTINCT order_id) AS cancelled_orders\nFROM v_sales\nWHERE order_status = 'cancelled'"
+    },
+    {
+      "id": "e13",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1249,
+      "tokens": 1048,
+      "sql": "SELECT round(sum(balance)::numeric, 2) AS total_unpaid_balance FROM v_receivables"
+    },
+    {
+      "id": "e14",
+      "bucket": "easy",
+      "outcome": "wrong",
+      "status": "ok",
+      "latencyMs": 881,
+      "tokens": 1047,
+      "sql": "SELECT COUNT(*) AS customer_count FROM v_customers WHERE segment = 'Government' AND active = true"
+    },
+    {
+      "id": "e15",
+      "bucket": "easy",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 747,
+      "tokens": 1064,
+      "sql": "SELECT product_id, sku, product_name, unit_price\nFROM v_products\nORDER BY unit_price DESC\nLIMIT 1"
+    },
+    {
+      "id": "m01",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 859,
+      "tokens": 1163,
+      "sql": "SELECT\n  product_id,\n  product_name,\n  sku,\n  round(sum(revenue)::numeric, 2) AS revenue\nFROM v_sales\nWHERE order_status = 'completed'\n  AND order_date >= DATE '2026-07-01'\n  AND order_date <= DATE '2026-09-30'\nGROUP BY product_id, product_name, sku\nORDER BY revenue DESC\nLIMIT 5"
+    },
+    {
+      "id": "m02",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 830,
+      "tokens": 1103,
+      "sql": "SELECT round(sum(revenue)::numeric, 2) AS total_revenue\nFROM v_sales\nWHERE order_status = 'completed'\n  AND order_date >= DATE '2026-10-01'\n  AND order_date < DATE '2026-11-01'"
+    },
+    {
+      "id": "m03",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 848,
+      "tokens": 1107,
+      "sql": "SELECT\n  category,\n  round(sum(revenue)::numeric, 2) AS revenue\nFROM v_sales\nWHERE order_status = 'completed'\n  AND EXTRACT(YEAR FROM order_date) = 2026\nGROUP BY category\nORDER BY revenue DESC"
+    },
+    {
+      "id": "m04",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1154,
+      "tokens": 1111,
+      "sql": "SELECT\n  customer_id,\n  customer_name,\n  round(sum(revenue)::numeric, 2) AS total_revenue\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY customer_id, customer_name\nORDER BY total_revenue DESC\nLIMIT 10"
+    },
+    {
+      "id": "m05",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1315,
+      "tokens": 1079,
+      "sql": "SELECT customer_city AS city,\n       round(sum(revenue)::numeric, 2) AS revenue\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY customer_city\nORDER BY revenue DESC"
+    },
+    {
+      "id": "m06",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 938,
+      "tokens": 1077,
+      "sql": "SELECT to_char(order_date, 'YYYY-MM') AS month,\n       COUNT(DISTINCT order_id) AS completed_orders\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY month\nORDER BY month"
+    },
+    {
+      "id": "m07",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1054,
+      "tokens": 1108,
+      "sql": "SELECT round(avg(order_total)::numeric, 2) AS avg_order_value\nFROM (\n    SELECT order_id, SUM(revenue) AS order_total\n    FROM v_sales\n    WHERE order_status = 'completed'\n    GROUP BY order_id\n) sub"
+    },
+    {
+      "id": "m08",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 846,
+      "tokens": 1119,
+      "sql": "SELECT\n  customer_id,\n  customer_name,\n  round(sum(balance)::numeric, 2) AS overdue_balance\nFROM v_receivables\nWHERE status = 'overdue'\n  AND balance > 0\nGROUP BY customer_id, customer_name\nORDER BY overdue_balance DESC"
+    },
+    {
+      "id": "m09",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 656,
+      "tokens": 1071,
+      "sql": "SELECT\n  category,\n  round(sum(margin)::numeric, 2) AS total_margin\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY category\nORDER BY total_margin DESC"
+    },
+    {
+      "id": "m10",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1001,
+      "tokens": 1185,
+      "sql": "SELECT\n  product_id,\n  product_name,\n  SUM(qty) AS units_sold\nFROM v_sales\nWHERE order_status = 'completed'\n  AND order_date >= DATE '2026-07-01'\n  AND order_date <= DATE '2026-09-30'\nGROUP BY product_id, product_name\nORDER BY units_sold DESC\nLIMIT 5"
+    },
+    {
+      "id": "m11",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1186,
+      "tokens": 1080,
+      "sql": "SELECT\n  customer_segment AS segment,\n  round(sum(revenue)::numeric, 2) AS revenue\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY customer_segment\nORDER BY revenue DESC"
+    },
+    {
+      "id": "m12",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 893,
+      "tokens": 1076,
+      "sql": "SELECT supplier_name,\n       round(sum(total_cost)::numeric, 2) AS total_spent\nFROM v_purchasing\nGROUP BY supplier_name\nORDER BY total_spent DESC\nLIMIT 1"
+    },
+    {
+      "id": "m13",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 580,
+      "tokens": 1040,
+      "sql": "SELECT COUNT(*) AS pending_po_count\nFROM v_purchasing\nWHERE received_date IS NULL"
+    },
+    {
+      "id": "m14",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 2004,
+      "tokens": 1105,
+      "sql": "SELECT supplier_name,\n       round(avg(days_late)::numeric, 2) AS avg_days_late\nFROM v_purchasing\nWHERE received_date IS NOT NULL\nGROUP BY supplier_name\nORDER BY avg_days_late DESC"
+    },
+    {
+      "id": "m15",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 3073,
+      "tokens": 1125,
+      "sql": "SELECT round(sum(revenue)::numeric, 2) AS revenue\nFROM v_sales\nWHERE order_status = 'completed'\n  AND customer_segment = 'Wholesale'\n  AND order_date >= DATE '2026-07-01'\n  AND order_date <= DATE '2026-09-30'"
+    },
+    {
+      "id": "m16",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1906,
+      "tokens": 1091,
+      "sql": "SELECT to_char(order_date, 'YYYY-MM') AS month,\n       round(sum(revenue)::numeric, 2) AS revenue\nFROM v_sales\nWHERE order_status = 'completed'\n  AND category = 'Tools'\nGROUP BY month\nORDER BY month"
+    },
+    {
+      "id": "m17",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1876,
+      "tokens": 1101,
+      "sql": "SELECT product_id,\n       product_name,\n       SUM(qty)::numeric AS total_units\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY product_id, product_name\nORDER BY total_units ASC\nLIMIT 3"
+    },
+    {
+      "id": "m18",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 2725,
+      "tokens": 1055,
+      "sql": "SELECT round(sum(paid_amount)::numeric, 2) AS total_paid FROM v_receivables"
+    },
+    {
+      "id": "m19",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 3319,
+      "tokens": 1103,
+      "sql": "SELECT COUNT(DISTINCT customer_id) AS distinct_customers\nFROM v_sales\nWHERE order_status = 'completed'\n  AND order_date >= DATE '2026-10-01'\n  AND order_date < DATE '2026-11-01'"
+    },
+    {
+      "id": "m20",
+      "bucket": "medium",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 2874,
+      "tokens": 1089,
+      "sql": "SELECT customer_city AS city,\n       COUNT(DISTINCT order_id) AS orders_cnt\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY customer_city\nORDER BY orders_cnt DESC\nLIMIT 3"
+    },
+    {
+      "id": "h01",
+      "bucket": "hard",
+      "outcome": "wrong",
+      "status": "ok",
+      "latencyMs": 3579,
+      "tokens": 1462,
+      "sql": "WITH period_rates AS (\n  SELECT\n    supplier_name,\n    CASE WHEN period = 'p1' THEN 'Jan-Apr 2026' ELSE 'May-Oct 2026' END AS period_name,\n    SUM(CASE WHEN on_time THEN 1 ELSE 0 END)::numeric / COUNT(*) AS on_time_rate\n  FROM (\n    SELECT\n      supplier_name,\n      on_time,\n      CASE\n        WHEN order_date BETWEEN '2026-01-01' AND '2026-04-30' THEN 'p1'\n        WHEN order_date BETWEEN '2026-05-01' AND '2026-10-31' THEN 'p2'\n      END AS period\n    FROM v_purchasing\n    WHERE received_date IS NOT NULL\n      AND order_date BETWEEN '2026-01-01' AND '2026-10-31'\n  ) sub\n  WHERE period IS NOT NULL\n  GROUP BY supplier_name, period\n), diffs AS (\n  SELECT\n    p1.supplier_name,\n    p1.on_time_rate AS rate_p1,\n    p2.on_time_rate AS rate_p2,\n    (p1.on_time_rate - p2.on_time_rate) AS rate_drop\n  FROM period_rates p1\n  JOIN period_rates p2 ON p1.supplier_name = p2.supplier_name\n  WHERE p1.period_name = 'Jan-Apr 2026' AND p2.period_name = 'May-Oct 2026'\n)\nSELECT\n  supplier_name,\n  round(rate_p1::numeric, 4) AS rate_jan_apr,\n  round(rate_p2::numeric, 4) AS rate_may_oct,\n  round(rate_drop::numeric, 4) AS rate_drop\nFROM diffs\nORDER BY rate_drop DESC\nLIMIT 1"
+    },
+    {
+      "id": "h02",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1632,
+      "tokens": 1232,
+      "sql": "WITH monthly_rev AS (\n  SELECT date_trunc('month', order_date) AS month,\n         sum(revenue) AS rev\n  FROM v_sales\n  WHERE order_status = 'completed'\n    AND order_date >= DATE '2026-09-01' AND order_date < DATE '2026-11-01'\n  GROUP BY 1\n)\nSELECT round(((oct.rev - sep.rev)::numeric / NULLIF(sep.rev,0)) * 100, 2) AS revenue_growth_pct\nFROM (SELECT rev FROM monthly_rev WHERE month = DATE '2026-10-01') AS oct,\n     (SELECT rev FROM monthly_rev WHERE month = DATE '2026-09-01') AS sep"
+    },
+    {
+      "id": "h03",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1899,
+      "tokens": 1093,
+      "sql": "SELECT category,\n       round( sum(margin)::numeric / nullif(sum(revenue),0), 4) AS gross_margin_pct\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY category\nORDER BY gross_margin_pct DESC\nLIMIT 1"
+    },
+    {
+      "id": "h04",
+      "bucket": "hard",
+      "outcome": "safe_fail",
+      "status": "failed",
+      "latencyMs": 4554,
+      "tokens": 1191,
+      "sql": "WITH customer_rev AS (\n    SELECT\n        customer_id,\n        SUM(revenue) AS rev\n    FROM v_sales\n    WHERE order_status = 'completed'\n    GROUP BY customer_id\n), ranked AS (\n    SELECT\n        customer_id,\n        rev,\n        SUM(rev) OVER () AS total_rev,\n        ROW_NUMBER() OVER (ORDER BY rev DESC) AS rn\n    FROM customer_rev\n)\nSELECT\n    round(100.0 * SUM(CASE WHEN rn <= 10 THEN rev END) / NULLIF(SUM(total_rev), 0)::numeric, 2) AS top_10_pct",
+      "error": "column \"rn\" does not exist"
+    },
+    {
+      "id": "h05",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 3118,
+      "tokens": 1087,
+      "sql": "SELECT to_char(order_date, 'YYYY-MM') AS month,\n       round(sum(revenue)::numeric, 2) AS revenue\nFROM v_sales\nWHERE order_status = 'completed'\nGROUP BY month\nORDER BY revenue DESC\nLIMIT 1"
+    },
+    {
+      "id": "h06",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1418,
+      "tokens": 1357,
+      "sql": "WITH rev_q AS (\n  SELECT\n    customer_id,\n    CASE\n      WHEN EXTRACT(QUARTER FROM order_date) = 2 AND EXTRACT(YEAR FROM order_date) = 2026 THEN 'q2'\n      WHEN EXTRACT(QUARTER FROM order_date) = 3 AND EXTRACT(YEAR FROM order_date) = 2026 THEN 'q3'\n    END AS quarter,\n    SUM(revenue) AS rev\n  FROM v_sales\n  WHERE order_status = 'completed'\n    AND EXTRACT(YEAR FROM order_date) = 2026\n    AND EXTRACT(QUARTER FROM order_date) IN (2,3)\n  GROUP BY customer_id, quarter\n),\nrev_pivot AS (\n  SELECT\n    customer_id,\n    MAX(CASE WHEN quarter = 'q2' THEN rev END) AS rev_q2,\n    MAX(CASE WHEN quarter = 'q3' THEN rev END) AS rev_q3\n  FROM rev_q\n  GROUP BY customer_id\n)\nSELECT COUNT(*) AS customers_lower_rev\nFROM rev_pivot\nWHERE rev_q2 IS NOT NULL             \n  AND rev_q3 IS NOT NULL             \n  AND rev_q3 < rev_q2"
+    },
+    {
+      "id": "h07",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 863,
+      "tokens": 1090,
+      "sql": "SELECT\n  category,\n  round(sum(on_hand * unit_cost)::numeric, 2) AS inventory_value\nFROM v_products\nGROUP BY category\nORDER BY inventory_value DESC"
+    },
+    {
+      "id": "h08",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 1727,
+      "tokens": 1065,
+      "sql": "SELECT product_id, sku, product_name, category,\n       (on_hand * unit_cost) AS inventory_value\nFROM v_products\nORDER BY inventory_value DESC\nLIMIT 1"
+    },
+    {
+      "id": "h09",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 5045,
+      "tokens": 1129,
+      "sql": "SELECT round( (COUNT(*) FILTER (WHERE balance = 0) * 100.0) / NULLIF(COUNT(*),0), 2) AS pct_fully_paid\nFROM v_receivables\nWHERE invoice_date BETWEEN DATE '2026-01-01' AND DATE '2026-12-31'"
+    },
+    {
+      "id": "h10",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 2104,
+      "tokens": 1186,
+      "sql": "WITH cust_rev AS (\n    SELECT\n        customer_id,\n        customer_segment AS segment,\n        SUM(revenue) AS total_rev\n    FROM v_sales\n    WHERE order_status = 'completed'\n    GROUP BY customer_id, customer_segment\n)\nSELECT\n    segment,\n    round(AVG(total_rev)::numeric, 2) AS avg_rev_per_customer\nFROM cust_rev\nGROUP BY segment\nORDER BY segment"
+    },
+    {
+      "id": "h11",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 3006,
+      "tokens": 1118,
+      "sql": "SELECT\n    customer_id,\n    customer_name,\n    round(sum(balance)::numeric, 2) AS total_overdue_balance,\n    count(*) AS overdue_invoice_count\nFROM v_receivables\nWHERE status = 'overdue'\nGROUP BY customer_id, customer_name\nORDER BY total_overdue_balance DESC\nLIMIT 1"
+    },
+    {
+      "id": "h12",
+      "bucket": "hard",
+      "outcome": "safe_fail",
+      "status": "failed",
+      "latencyMs": 1229,
+      "tokens": 1299,
+      "sql": "WITH rev AS (\n  SELECT\n    CASE\n      WHEN order_date BETWEEN DATE '2025-11-01' AND DATE '2025-12-31' THEN '2025_nov_dec'\n      WHEN order_date BETWEEN DATE '2026-07-01' AND DATE '2026-08-31' THEN '2026_jul_aug'\n    END AS period,\n    SUM(revenue) AS rev\n  FROM v_sales\n  WHERE order_status = 'completed'\n    AND order_date BETWEEN DATE '2025-11-01' AND DATE '2025-12-31'\n       OR order_date BETWEEN DATE '2026-07-01' AND DATE '2026-08-31'\n  GROUP BY period\n)\nSELECT\n  round((\n    COALESCE(MAX(CASE WHEN period = '2025_nov_dec' THEN rev END),0) -\n    COALESCE(MAX(CASE WHEN period = '2026_jul_aug' THEN rev END),0)\n  )::numeric, 2) AS revenue_diff",
+      "error": "column \"period\" does not exist"
+    },
+    {
+      "id": "h13",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 3665,
+      "tokens": 1445,
+      "sql": "WITH q2 AS (\n  SELECT product_id,\n         SUM(revenue) AS rev_q2\n  FROM v_sales\n  WHERE order_status = 'completed'\n    AND order_date >= DATE '2026-04-01' AND order_date <= DATE '2026-06-30'\n  GROUP BY product_id\n),\nq3 AS (\n  SELECT product_id,\n         SUM(revenue) AS rev_q3\n  FROM v_sales\n  WHERE order_status = 'completed'\n    AND order_date >= DATE '2026-07-01' AND order_date <= DATE '2026-09-30'\n  GROUP BY product_id\n),\ngrowth AS (\n  SELECT q3.product_id,\n         COALESCE(q3.rev_q3,0) - COALESCE(q2.rev_q2,0) AS rev_growth,\n         COALESCE(q3.rev_q3,0) AS rev_q3,\n         COALESCE(q2.rev_q2,0) AS rev_q2,\n         p.product_name\n  FROM q3\n  LEFT JOIN q2 ON q3.product_id = q2.product_id\n  JOIN v_products p ON p.product_id = q3.product_id\n)\nSELECT product_id,\n       product_name,\n       round(rev_q2::numeric,2) AS rev_q2,\n       round(rev_q3::numeric,2) AS rev_q3,\n       round(rev_growth::numeric,2) AS rev_growth\nFROM growth\nORDER BY rev_growth DESC\nLIMIT 1"
+    },
+    {
+      "id": "h14",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 4236,
+      "tokens": 1201,
+      "sql": "SELECT round(100.0 * sum(CASE WHEN days_late > 0 THEN 1 ELSE 0 END)::numeric / NULLIF(count(*), 0), 2) AS pct_late\nFROM v_purchasing\nWHERE received_date IS NOT NULL"
+    },
+    {
+      "id": "h15",
+      "bucket": "hard",
+      "outcome": "correct",
+      "status": "ok",
+      "latencyMs": 4509,
+      "tokens": 1201,
+      "sql": "SELECT\n  p.product_id,\n  p.product_name,\n  SUM(s.qty) AS units_sold,\n  SUM(s.margin) AS total_margin,\n  SUM(s.revenue) AS total_revenue,\n  round((SUM(s.margin)::numeric / NULLIF(SUM(s.revenue),0)) * 100, 2) AS margin_pct\nFROM v_sales s\nJOIN v_products p ON p.product_id = s.product_id\nWHERE s.order_status = 'completed'\nGROUP BY p.product_id, p.product_name\nHAVING SUM(s.qty) >= 100\nORDER BY margin_pct DESC\nLIMIT 3"
+    },
+    {
+      "id": "r01",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 1869,
+      "tokens": 1013,
+      "sql": ""
+    },
+    {
+      "id": "r02",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 1997,
+      "tokens": 1009,
+      "sql": ""
+    },
+    {
+      "id": "r03",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 1739,
+      "tokens": 1029,
+      "sql": ""
+    },
+    {
+      "id": "r04",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 1846,
+      "tokens": 1025,
+      "sql": ""
+    },
+    {
+      "id": "r05",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 2131,
+      "tokens": 1017,
+      "sql": ""
+    },
+    {
+      "id": "r06",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 2692,
+      "tokens": 1010,
+      "sql": ""
+    },
+    {
+      "id": "r07",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 2604,
+      "tokens": 1024,
+      "sql": ""
+    },
+    {
+      "id": "r08",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 2774,
+      "tokens": 1024,
+      "sql": ""
+    },
+    {
+      "id": "r09",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 2955,
+      "tokens": 1014,
+      "sql": ""
+    },
+    {
+      "id": "r10",
+      "bucket": "refuse",
+      "outcome": "refused_ok",
+      "status": "refused",
+      "latencyMs": 2807,
+      "tokens": 1020,
+      "sql": ""
+    }
+  ]
+}

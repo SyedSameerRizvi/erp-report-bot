@@ -1,0 +1,32 @@
+{
+  "name": "erp-report-bot",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "db:seed": "tsx --env-file-if-exists=.env.local scripts/seed.ts",
+    "eval": "tsx --env-file-if-exists=.env.local evals/run.ts",
+    "test": "tsx --test lib/*.test.ts evals/*.test.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/groq": "^4.0.86",
+    "@electric-sql/pglite": "^0.6.0",
+    "ai": "^7.0.181",
+    "next": "^16.4.6",
+    "pg": "^8.23.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "recharts": "^3.11.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.10",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
