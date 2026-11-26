@@ -1,0 +1,28 @@
+{
+  "label": "baseline after Supabase login + AI guardrails (uncommitted on top of 2dfc1c1)",
+  "measuredAt": "2026-11-26",
+  "machine": "Windows 11 dev box, local PGlite, Groq free tier",
+  "notes": [
+    "Page and API numbers are from `next dev` (warm). Production `next start` refuses to serve until Supabase keys are set, by design.",
+    "Dev JS sizes are unminified dev bundles; use build.staticGzipKB for real bundle weight.",
+    "LLM latency is not benchmarked here (rate limits); see evals/results/*.json p50/p95."
+  ],
+  "build": { "typecheckMs": 1971, "unitTestsMs": 1069, "coldBuildMs": 19993, "staticGzipKB": { "js": 387, "css": 5, "fonts": 218 } },
+  "pages_dev": {
+    "/":         { "ttfbMs": 40, "fcpMs": 396, "lcpMs": 2200, "cls": 0, "loadMs": 344, "requests": 26 },
+    "/explorer": { "ttfbMs": 82, "fcpMs": 164, "lcpMs": 164,  "cls": 0, "loadMs": 308, "requests": 18 },
+    "/login":    { "ttfbMs": 32, "fcpMs": 120, "lcpMs": 120,  "cls": 0, "loadMs": 293, "requests": 20 }
+  },
+  "api_dev": {
+    "ask_cache_hit_seq":   { "n": 100, "p50": 17.6,  "p95": 26.7,  "p99": 132,  "codes": { "200": 100 } },
+    "ask_cache_hit_c10":   { "n": 100, "p50": 120.7, "p95": 168.7, "p99": 197.5, "codes": { "200": 100 } },
+    "ask_input_guard":     { "n": 30,  "p50": 13.6,  "p95": 22.7,  "p99": 22.8,  "codes": { "200": 30 } },
+    "ask_validation_400":  { "n": 100, "p50": 11.4,  "p95": 13.2,  "p99": 21.8,  "codes": { "400": 100 } }
+  },
+  "targets": { "lcpMs": 2500, "cls": 0.1, "fcpMs": 1800, "ttfbMs": 800, "jsGzipKB": 200 },
+  "verdicts": {
+    "lcp_home": "WARN: 2200ms, driven by the first-visit entrance animation (headline fades in), not payload",
+    "js_total": "WARN: 387KB gzip across ALL routes (Recharts is the bulk); per-route is lower but not measured in prod yet",
+    "concurrency": "INFO: PGlite serializes queries, so 10 concurrent cache hits queue (p50 18ms -> 121ms); production uses a pg Pool"
+  }
+}

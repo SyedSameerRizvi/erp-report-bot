@@ -23,6 +23,8 @@ const PlanWire = z.object({
   sql: z.string().describe("one PostgreSQL SELECT over the reports views; empty when refusing"),
   chart: ChartSpec.extend({ type: z.string().describe(`one of: ${CHART_TYPES.join(", ")}`) }),
   default_view: z.enum(["text", "table", "chart"]),
+  clarify: z.string().describe("one short question when a key term is ambiguous and changes the answer; else empty"),
+  clarify_options: z.array(z.string()).describe("2-3 complete rewritten questions the user can pick; empty unless clarify is set"),
 });
 export type Plan = Omit<z.infer<typeof PlanWire>, "chart"> & { chart: ChartSpec };
 const toPlan = (w: z.infer<typeof PlanWire>): Plan => ({
@@ -79,13 +81,14 @@ export async function summarize(question: string, rows: Record<string, unknown>[
 }
 
 // ---- mock mode: $0 UI development, no key needed ----
+const NO_Q = { clarify: "", clarify_options: [] as string[] };
 function mockPlan(q: string): Plan {
   const s = q.toLowerCase();
   const none = { type: "none" as const, x: "", y: [], title: "" };
-  if (/delete|drop|update|insert/.test(s)) return { refuse: true, refuse_reason: "I can only read data, not change it.", sql: "", chart: none, default_view: "text" };
-  if (/customer/.test(s)) return { refuse: false, refuse_reason: "", sql: "SELECT count(*) AS active_customers FROM v_customers WHERE active", chart: none, default_view: "text" };
-  if (/month|trend/.test(s)) return { refuse: false, refuse_reason: "", sql: "SELECT to_char(date_trunc('month', order_date), 'YYYY-MM') AS month, round(sum(revenue)) AS revenue FROM v_sales WHERE order_status = 'completed' GROUP BY 1 ORDER BY 1", chart: { type: "line", x: "month", y: ["revenue"], title: "Revenue by month" }, default_view: "chart" };
-  return { refuse: false, refuse_reason: "", sql: "SELECT product_name, round(sum(revenue)) AS revenue FROM v_sales WHERE order_status = 'completed' GROUP BY 1 ORDER BY 2 DESC LIMIT 5", chart: { type: "bar", x: "product_name", y: ["revenue"], title: "Top 5 products by revenue" }, default_view: "chart" };
+  if (/delete|drop|update|insert/.test(s)) return { refuse: true, refuse_reason: "I can only read data, not change it.", sql: "", chart: none, default_view: "text", ...NO_Q };
+  if (/customer/.test(s)) return { refuse: false, refuse_reason: "", sql: "SELECT count(*) AS active_customers FROM v_customers WHERE active", chart: none, default_view: "text", ...NO_Q };
+  if (/month|trend/.test(s)) return { refuse: false, refuse_reason: "", sql: "SELECT to_char(date_trunc('month', order_date), 'YYYY-MM') AS month, round(sum(revenue)) AS revenue FROM v_sales WHERE order_status = 'completed' GROUP BY 1 ORDER BY 1", chart: { type: "line", x: "month", y: ["revenue"], title: "Revenue by month" }, default_view: "chart", ...NO_Q };
+  return { refuse: false, refuse_reason: "", sql: "SELECT product_name, round(sum(revenue)) AS revenue FROM v_sales WHERE order_status = 'completed' GROUP BY 1 ORDER BY 2 DESC LIMIT 5", chart: { type: "bar", x: "product_name", y: ["revenue"], title: "Top 5 products by revenue" }, default_view: "chart", ...NO_Q };
 }
 const mockSummary = (rows: Record<string, unknown>[]) => rows.length === 1 && Object.keys(rows[0]).length === 1
   ? `The answer is ${Number(Object.values(rows[0])[0]).toLocaleString()}.` : `Here are ${rows.length} rows (mock mode summary).`;

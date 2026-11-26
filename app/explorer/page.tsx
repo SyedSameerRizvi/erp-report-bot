@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { getDb } from "@/lib/db";
+import { requirePageUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-const STATUSES = ["ok", "cache_hit", "refused", "failed"];
+const STATUSES = ["ok", "cache_hit", "clarify", "info", "refused", "failed"];
 
 export default async function Explorer({ searchParams }: { searchParams: Promise<{ status?: string; saved?: string; q?: string }> }) {
   const sp = await searchParams;
   const status = STATUSES.includes(sp.status ?? "") ? sp.status! : null;
   const savedOnly = sp.saved === "1";
   const q = (sp.q ?? "").trim().slice(0, 100) || null;
+  await requirePageUser();
   const db = await getDb();
   const runs = await db.query(
     `SELECT id, created_at, question, title, status, model, latency_ms, prompt_tokens + completion_tokens AS tokens, row_count, saved
@@ -40,8 +42,8 @@ export default async function Explorer({ searchParams }: { searchParams: Promise
           <table className="runs">
             <thead><tr><th scope="col">Question</th><th scope="col">Status</th><th scope="col">Rows</th><th scope="col">Latency</th><th scope="col">Tokens</th><th scope="col">When</th></tr></thead>
             <tbody>
-              {runs.map(r => (
-                <tr key={String(r.id)}>
+              {runs.map((r, i) => (
+                <tr key={String(r.id)} style={{ "--i": i } as React.CSSProperties}>
                   <td><Link href={`/explorer/${r.id}`}>{r.saved ? "★ " : ""}{String(r.title ?? r.question)}</Link></td>
                   <td><span className={`badge ${r.status}`}>{String(r.status).replace("_", " ")}</span></td>
                   <td className="num">{String(r.row_count ?? 0)}</td>

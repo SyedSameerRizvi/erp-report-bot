@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS app.report_runs (
   data_version int,
   sql text,
   row_count int,
-  status text NOT NULL,            -- ok | refused | failed | cache_hit
+  status text NOT NULL,            -- ok | refused | failed | cache_hit | clarify | info
   error text,
   model text,
   latency_ms int,

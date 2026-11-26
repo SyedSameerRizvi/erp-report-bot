@@ -6,14 +6,14 @@ import type { ChartSpec } from "@/lib/llm";
 export type Result = {
   runId?: number; status: string; question: string; answer: string; sql: string;
   columns: string[]; rows: Record<string, unknown>[]; truncated: boolean;
-  chart: ChartSpec; defaultView: "text" | "table" | "chart"; error?: string; model: string; latencyMs: number;
+  chart: ChartSpec; defaultView: "text" | "table" | "chart"; error?: string; model: string; latencyMs: number; options?: string[];
 };
 
 const COLORS = ["#2F6BFF", "#7C48F0", "#3AD0FF", "#5A4CF5", "#8FA8FF", "#B49CFF", "#1E4FD8", "#6E6E6E"];
 const TIP = { contentStyle: { background: "#1A1A1A", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, color: "#fff" }, itemStyle: { color: "#fff" }, labelStyle: { color: "#8C8C8C" } };
 const fmt = (v: unknown) => typeof v === "number" ? v.toLocaleString(undefined, { maximumFractionDigits: 2 }) : String(v ?? "");
 
-export default function ResultView({ result }: { result: Result }) {
+export default function ResultView({ result, onAsk }: { result: Result; onAsk?: (question: string) => void }) {
   const [view, setView] = useState(result.defaultView);
   const [chart, setChart] = useState(result.chart);
   const [restyle, setRestyle] = useState("");
@@ -61,9 +61,11 @@ export default function ResultView({ result }: { result: Result }) {
               <button key={v} role="tab" aria-selected={view === v} onClick={() => setView(v)}>{v[0].toUpperCase() + v.slice(1)}</button>
             ))}
           </div>
-          {view === "text" && <p className="answer">{result.answer || "No summary (see table)."}</p>}
-          {view === "table" && <DataTable columns={result.columns} rows={result.rows} />}
-          {view === "chart" && (chartable ? <Chart spec={chart} rows={result.rows} /> : <p className="meta">No chart for this result. Try asking for one below.</p>)}
+          <div className="panel" key={view + chart.type}>
+            {view === "text" && <p className="answer">{result.answer || "No summary (see table)."}</p>}
+            {view === "table" && <DataTable columns={result.columns} rows={result.rows} />}
+            {view === "chart" && (chartable ? <Chart spec={chart} rows={result.rows} /> : <p className="meta">No chart for this result. Try asking for one below.</p>)}
+          </div>
           <form className="ask" onSubmit={doRestyle} style={{ marginTop: 14 }}>
             <input type="text" aria-label="Change the chart" placeholder='Change the chart, e.g. "make it a pie chart"' value={restyle} onChange={e => setRestyle(e.target.value)} />
             <button className="ghost" disabled={busy}>{busy ? "…" : "Apply"}</button>
@@ -71,7 +73,14 @@ export default function ResultView({ result }: { result: Result }) {
           {err && <p className="error" role="alert">{err}</p>}
         </>
       ) : (
-        <p className="answer">{result.answer}</p>
+        <>
+          <p className="answer">{result.answer}</p>
+          {onAsk && !!result.options?.length && (
+            <div className="chips" role="group" aria-label="Pick what you meant">
+              {result.options.map((o, i) => <button key={o} type="button" className="chip pop" style={{ "--i": i } as React.CSSProperties} onClick={() => onAsk(o)}>{o}</button>)}
+            </div>
+          )}
+        </>
       )}
 
       {result.sql && (
