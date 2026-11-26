@@ -3,7 +3,7 @@
 //   2. the planner prompt: ERP-only scope, refuse everything else (lib/pipeline.ts)
 //   3. guardSql + read-only role (lib/sql-guard.ts, lib/pipeline.ts)
 //   4. checkSummary: the answer sentence may only state numbers that are in the result, and no links/markup
-//   5. overQuota: per-user hourly cap on fresh (non-cached) questions
+//   5. overQuota: app-wide hourly cap on fresh (non-cached) questions, to protect the Groq key
 import type { Row } from "./db";
 
 export const OFF_TOPIC = "That's outside what I can help with. I answer questions about the company's ERP data: sales, customers, products and stock, suppliers and purchasing, and receivables.";
@@ -65,8 +65,8 @@ export function fallbackSummary(rows: Row[]): string {
   return rows.length ? `Found ${rows.length.toLocaleString("en-US")} rows. See the table for details.` : "The query returned no rows.";
 }
 
-export async function overQuota(db: { query: (sql: string, p?: unknown[]) => Promise<Row[]> }, userId: string): Promise<boolean> {
+export async function overQuota(db: { query: (sql: string, p?: unknown[]) => Promise<Row[]> }): Promise<boolean> {
   const [r] = await db.query(
-    "SELECT count(*) AS n FROM app.report_runs WHERE user_id = $1 AND status <> 'cache_hit' AND created_at > now() - interval '1 hour'", [userId]);
+    "SELECT count(*) AS n FROM app.report_runs WHERE status NOT IN ('cache_hit', 'info') AND created_at > now() - interval '1 hour'");
   return Number(r.n) >= HOURLY_QUOTA;
 }

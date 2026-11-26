@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import Icon from "./Icon";
 
 const RAIL = [
@@ -9,7 +9,7 @@ const RAIL = [
   [{ href: "/explorer?saved=1", icon: "star", label: "Saved reports" }, { href: "/explorer?status=failed", icon: "flask", label: "Failed runs" }],
 ];
 
-export default function Shell({ children, runsToday, modelLabel, live, email }: { children: ReactNode; runsToday: number; modelLabel: string; live: boolean; email: string | null }) {
+export default function Shell({ children, runsToday, modelLabel, live }: { children: ReactNode; runsToday: number; modelLabel: string; live: boolean }) {
   const path = usePathname();
   const router = useRouter();
   const onExplorer = path.startsWith("/explorer");
@@ -32,11 +32,6 @@ export default function Shell({ children, runsToday, modelLabel, live, email }: 
           </div>
         ))}
         <div className="rail-bottom">
-          {email ? (
-            <form action="/auth/signout" method="post" className="signout" data-enter="rail">
-              <button className="tile" title={`Signed in as ${email}. Click to sign out.`} aria-label={`Sign out ${email}`}><Icon name="user" /></button>
-            </form>
-          ) : <Link href="/login" className="tile" data-enter="rail" title="Login is off: set it up" aria-label="Login"><Icon name="user" /></Link>}
           <span className="tile" data-enter="rail" title="Settings (coming soon)"><Icon name="gear" label="Settings" /></span>
         </div>
       </aside>
@@ -55,7 +50,6 @@ export default function Shell({ children, runsToday, modelLabel, live, email }: 
               <input type="search" name="q" placeholder="Search reports..." aria-label="Search past reports" />
             </form>
             <span className="tile" data-enter="top" title="No new alerts"><Icon name="bell" label="Notifications" /></span>
-            <ProfileMenu email={email} />
           </div>
         </header>
 
@@ -101,32 +95,4 @@ function useEntrance() {
     }
     document.documentElement.classList.add("entered");
   }, []);
-}
-
-/** Avatar button with a small menu: who you are, and sign out (or how to turn login on). */
-function ProfileMenu({ email }: { email: string | null }) {
-  const ref = useRef<HTMLDetailsElement>(null);
-  const path = usePathname();
-  useEffect(() => { if (ref.current) ref.current.open = false; }, [path]); // close after navigating
-  useEffect(() => {
-    const close = (e: MouseEvent | KeyboardEvent) => {
-      const d = ref.current;
-      if (d?.open && (("key" in e && e.key === "Escape") || ("target" in e && e instanceof MouseEvent && !d.contains(e.target as Node)))) d.open = false;
-    };
-    document.addEventListener("click", close); document.addEventListener("keydown", close);
-    return () => { document.removeEventListener("click", close); document.removeEventListener("keydown", close); };
-  }, []);
-  return (
-    <details className="profile" ref={ref} data-enter="top">
-      <summary className="avatar" aria-label={email ? `Account menu for ${email}` : "Account menu (demo user)"}>{email ? email.slice(0, 2).toUpperCase() : "DU"}</summary>
-      <div className="profile-menu" role="menu">
-        <p className="profile-who">{email ?? "Demo user"}</p>
-        <p className="meta">{email ? "Signed in with Supabase" : "Login is off: the app runs as a local demo user."}</p>
-        {email ? (
-          <form action="/auth/signout" method="post"><button className="btn" role="menuitem">Sign out</button></form>
-        ) : <Link href="/login" className="btn" role="menuitem">Set up login</Link>}
-        <Link href="/explorer?saved=1" className="profile-link" role="menuitem"><Icon name="star" size={14} /> Saved reports</Link>
-      </div>
-    </details>
-  );
 }

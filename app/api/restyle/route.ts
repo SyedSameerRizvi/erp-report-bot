@@ -1,13 +1,11 @@
 import { ChartSpec, RateLimitError, restyleChart } from "@/lib/llm";
 import { z } from "zod";
-import { currentUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
 const Body = z.object({ question: z.string().max(500), instruction: z.string().min(1).max(200), columns: z.array(z.string()).max(50), chart: ChartSpec });
 
 export async function POST(req: Request) {
-  if (!(await currentUser())) return Response.json({ error: "Sign in first." }, { status: 401 });
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "Bad request." }, { status: 400 });
   const { question, instruction, columns, chart } = parsed.data;

@@ -1,10 +1,8 @@
 import { getDb } from "@/lib/db";
-import { currentUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
-  if (!(await currentUser())) return Response.json({ error: "Sign in first." }, { status: 401 });
   const id = Number((await ctx.params).id);
   const body = await req.json().catch(() => ({}));
   if (!Number.isInteger(id)) return Response.json({ error: "Bad id." }, { status: 400 });

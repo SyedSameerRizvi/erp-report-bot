@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDb } from "@/lib/db";
-import { requirePageUser } from "@/lib/auth";
 import ResultView, { type Result } from "@/components/ResultView";
 import Rerun from "@/components/Rerun";
 
@@ -10,7 +9,6 @@ export const dynamic = "force-dynamic";
 export default async function RunPage({ params }: { params: Promise<{ id: string }> }) {
   const id = Number((await params).id);
   if (!Number.isInteger(id)) notFound();
-  await requirePageUser();
   const db = await getDb();
   const [r] = await db.query("SELECT * FROM app.report_runs WHERE id = $1", [id]);
   if (!r) notFound();

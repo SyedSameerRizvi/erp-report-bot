@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getDb } from "@/lib/db";
-import { requirePageUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +10,6 @@ export default async function Explorer({ searchParams }: { searchParams: Promise
   const status = STATUSES.includes(sp.status ?? "") ? sp.status! : null;
   const savedOnly = sp.saved === "1";
   const q = (sp.q ?? "").trim().slice(0, 100) || null;
-  await requirePageUser();
   const db = await getDb();
   const runs = await db.query(
     `SELECT id, created_at, question, title, status, model, latency_ms, prompt_tokens + completion_tokens AS tokens, row_count, saved
